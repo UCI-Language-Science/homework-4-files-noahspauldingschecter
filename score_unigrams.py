@@ -63,6 +63,7 @@ def score_unigrams(training, test, output):
     with path_to_test.open('r') as testing_data_temp, path_to_output.open('w') as output_file:
         writer = csv.writer(output_file)
         writer.writerow(['sentence', 'unigram_prob'])
+        full_dict = []
         for line in testing_data_temp:
             log_probability = 0
             line_strip = line.strip()
@@ -75,10 +76,13 @@ def score_unigrams(training, test, output):
                 else:
                     log_probability += log(unigram_model.get(word))
             dict_to_upload = {}
-            dict_to_upload['sentence'] = str(line)
+            dict_to_upload['sentence'] = str(line.strip('\n'))
             dict_to_upload['unigram_prob'] = str(log_probability)
+            full_dict.append(dict_to_upload)
             writer = csv.DictWriter(output_file, fieldnames=['sentence','unigram_prob'])
             writer.writerow(dict_to_upload)
+    print(full_dict)
+    return full_dict
 
 score_unigrams(
     Path('training_data'),
