@@ -19,10 +19,34 @@
 # Winter, B. (2016). Taste and smell words form an affectively loaded and emotionally
 # flexible part of the English lexicon. Language, Cognition and Neuroscience, 31(8), 
 # 975-988.
+from pathlib import Path
 
-#######################
-# YOUR CODE GOES HERE #
-#######################
+
+def get_mean_valence(file):
+    path_to_file = Path(file)
+    with open(path_to_file, 'r') as file:
+        data = [line.strip().split(',') for line in file]
+    def modality_average(modality):
+        running_average = 0
+        running_count = 0
+        for entry in data:
+            if entry[1] == modality:
+                running_average += float(entry[2])
+                running_count += 1
+        total_average = running_average / running_count
+        return total_average
+    
+    output = {}
+    output['Sight'] = modality_average('Sight')
+    output['Touch'] = modality_average('Touch')
+    output['Sound'] = modality_average('Sound')
+    output['Taste'] = modality_average('Taste')
+    output['Smell'] = modality_average('Smell')
+    
+    print(output)
+    return output
+            
+get_mean_valence(Path('winter_2016_senses_valence.csv'))
 
 # Do not modify the following line
 if __name__ == "__main__":
