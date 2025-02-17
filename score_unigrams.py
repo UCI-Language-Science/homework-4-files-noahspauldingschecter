@@ -82,12 +82,7 @@ def score_unigrams(training, test, output):
             writer = csv.DictWriter(output_file, fieldnames=['sentence','unigram_prob'])
             writer.writerow(dict_to_upload)
     print(full_dict)
-    return full_dict
-
-score_unigrams(
-    Path('training_data'),
-    Path('test_data/test_sentences.txt'),
-    Path('output.csv'))           
+    return full_dict  
 
 # Do not modify the following line
 if __name__ == "__main__":

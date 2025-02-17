@@ -37,16 +37,14 @@ def get_mean_valence(file):
         return total_average
     
     output = {}
-    output['Sight'] = modality_average('Sight')
     output['Touch'] = modality_average('Touch')
-    output['Sound'] = modality_average('Sound')
+    output['Sight'] = modality_average('Sight')
     output['Taste'] = modality_average('Taste')
     output['Smell'] = modality_average('Smell')
+    output['Sound'] = modality_average('Sound')
     
     print(output)
     return output
-            
-get_mean_valence(Path('winter_2016_senses_valence.csv'))
 
 # Do not modify the following line
 if __name__ == "__main__":
