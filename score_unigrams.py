@@ -32,13 +32,58 @@
 # You will need to use log and -inf here. 
 # You can add any additional import statements you need here.
 from math import log, inf
+import math
+from pathlib import Path
+import csv
 
+def score_unigrams(training, test, output):
+    path_to_training = Path(training)
+    training_files = path_to_training.glob('*')
+    
+    path_to_test = Path(test)
 
-#######################
-# YOUR CODE GOES HERE #
-#######################
+    path_to_output = Path(output)
 
+    word_counts = {}
+    total_word_count = 0
 
+    for file_path in training_files:
+        with file_path.open('r') as training_data_temp:
+            for line in training_data_temp:
+                line_list = line.split()
+                for raw_word in line_list:
+                    word = raw_word.lower()
+                    word_counts[word] = word_counts.get(word, 0) + 1
+                    total_word_count += 1
+
+    unigram_model = word_counts
+    for word in unigram_model:
+        unigram_model[word] = (unigram_model.get(word)/total_word_count)
+
+    with path_to_test.open('r') as testing_data_temp, path_to_output.open('w') as output_file:
+        writer = csv.writer(output_file)
+        writer.writerow(['sentence', 'unigram_prob'])
+        for line in testing_data_temp:
+            log_probability = 0
+            line_strip = line.strip()
+            print(line_strip)
+            line_list = line_strip.split()
+            for raw_word in line_list:
+                word = raw_word.lower()
+                if unigram_model.get(word) == None:
+                    log_probability = (-inf)
+                else:
+                    log_probability += log(unigram_model.get(word))
+            dict_to_upload = {}
+            dict_to_upload['sentence'] = str(line)
+            dict_to_upload['unigram_prob'] = str(log_probability)
+            writer = csv.DictWriter(output_file, fieldnames=['sentence','unigram_prob'])
+            writer.writerow(dict_to_upload)
+
+score_unigrams(
+    Path('training_data'),
+    Path('test_data/test_sentences.txt'),
+    Path('output.csv'))           
 
 # Do not modify the following line
 if __name__ == "__main__":
